@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Make Payment - MS Power Fitness</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-dark bg-dark mb-4">
+    <div class="container">
+        <span class="navbar-brand">MS Power Secure Payment</span>
+        <button onclick="history.back()" class="btn btn-outline-light btn-sm">Cancel</button>
+    </div>
+</nav>
+
+<div class="container" style="max-width: 800px;">
+    
+    <h3 class="mb-4">Renew Membership</h3>
+
+    <div class="row g-4">
+        <div class="col-md-7">
+            <div class="card shadow-sm mb-3">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">1. Select a Plan</h5>
+                </div>
+                <div class="card-body">
+                    
+                    <div class="form-check p-3 border rounded mb-2 bg-light">
+                        <input class="form-check-input mt-2" type="radio" name="plan" id="plan1" checked>
+                        <label class="form-check-label w-100" for="plan1">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>Monthly Access</strong><br>
+                                    <small class="text-muted">Gym + Cardio</small>
+                                </div>
+                                <span class="fs-5 fw-bold text-primary">₹800</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="form-check p-3 border rounded">
+                        <input class="form-check-input mt-2" type="radio" name="plan" id="plan2">
+                        <label class="form-check-label w-100" for="plan2">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>Yearly Gold</strong> <span class="badge bg-warning text-dark">Best Value</span><br>
+                                    <small class="text-muted">Includes Trainer + Diet</small>
+                                </div>
+                                <span class="fs-5 fw-bold text-primary">₹8,000</span>
+                            </div>
+                        </label>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">2. Payment Method</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Upload Payment Screenshot / Transaction ID</label>
+                        <input type="text" class="form-control" placeholder="Enter UPI Transaction ID (e.g. 1234567890)">
+                    </div>
+                    <div class="alert alert-info small">
+                        <i class="fas fa-info-circle"></i> Payments are usually approved within 15 minutes.
+                    </div>
+                    <button id="payBtn" class="btn btn-success w-100 btn-lg">Initiate Payment</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h6>Scan to Pay</h6>
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=gym@upi&pn=MSPowerFitness&am=800" class="img-fluid border p-2 mb-3">
+                    <p class="text-muted small">UPI ID: <strong>mspower@upi</strong></p>
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <span>Total:</span>
+                        <span class="fw-bold fs-5">₹800.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('payBtn').addEventListener('click', function() {
+        // Simulate processing
+        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        setTimeout(() => {
+            alert("Payment Initiated! Waiting for Admin Approval.");
+            window.location.href = 'user-dashboard.html'; // Redirect to active dashboard
+        }, 1500);
+    });
+</script>
+
+</body>
+</html>

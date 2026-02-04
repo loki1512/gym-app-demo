@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Admins</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="admin-dashboard.html">MS Power Fitness Admin</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link" href="admin-dashboard.html">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="admin-members.html">Memberships</a></li>
+                <li class="nav-item"><a class="nav-link active" href="admin-admins.html">Admins</a></li>
+                <li class="nav-item"><a class="nav-link" href="admin-approvals.html">Approvals</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Admin Management</h2>
+        <button class="btn btn-primary" onclick="alert('Demo: Admin Created!')">+ New Admin</button>
+    </div>
+
+    <div class="card">
+        <table class="table table-striped mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Master Admin</td>
+                    <td>owner@mspower.com</td>
+                    <td>Super Admin</td>
+                    <td><span class="text-muted">Locked</span></td>
+                </tr>
+                <tr>
+                    <td>Manager John</td>
+                    <td>john@mspower.com</td>
+                    <td>Manager</td>
+                    <td><button class="btn btn-sm btn-danger">Remove</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

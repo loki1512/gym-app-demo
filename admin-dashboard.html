@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard - MS Power Fitness</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .clickable-card { cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+        .clickable-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .active-filter { border: 3px solid #0d6efd; transform: scale(1.02); }
+        a { text-decoration: none; }
+    </style>
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">MS Power Fitness Admin</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link active" href="admin-dashboard.html">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="admin-members.html">Memberships</a></li>
+                <li class="nav-item"><a class="nav-link" href="admin-admins.html">Admins</a></li>
+                <li class="nav-item"><a class="nav-link" href="admin-approvals.html">Approvals <span class="badge bg-danger">2</span></a></li>
+            </ul>
+            <a href="index.html" class="btn btn-outline-light btn-sm">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    
+    <div class="d-flex justify-content-between align-items-end mb-4">
+        <div>
+            <h2 class="fw-bold mb-0">Welcome back, Master Admin 👋</h2>
+            <p class="text-muted mb-0">Focus on retention today.</p>
+        </div>
+        <div class="text-end">
+            <span class="text-muted fw-bold" id="currentDate"></span>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <a href="admin-members.html?filter=All">
+                <div class="card text-white bg-primary h-100 clickable-card shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="card-title text-uppercase mb-0">Total Members</h6>
+                                <span class="display-6 fw-bold">5</span>
+                            </div>
+                            <i class="fas fa-users fa-2x opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <div class="col-md-3">
+            <a href="admin-members.html?filter=Active">
+                <div class="card text-white bg-success h-100 clickable-card shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="card-title text-uppercase mb-0">Active</h6>
+                                <span class="display-6 fw-bold">3</span>
+                            </div>
+                            <i class="fas fa-check-circle fa-2x opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-3">
+            <div id="tileExpiring" class="card text-dark bg-warning h-100 clickable-card shadow-sm active-filter" onclick="switchTable('Expiring')">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title text-uppercase mb-0">Expiring (7d)</h6>
+                            <span class="display-6 fw-bold" id="countExpiring">0</span>
+                        </div>
+                        <i class="fas fa-clock fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div id="tileExpired" class="card text-white bg-danger h-100 clickable-card shadow-sm" onclick="switchTable('Expired')">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title text-uppercase mb-0">Expired</h6>
+                            <span class="display-6 fw-bold" id="countExpired">0</span>
+                        </div>
+                        <i class="fas fa-times-circle fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-12">
+             <a href="admin-approvals.html">
+                <div class="card bg-info text-white clickable-card shadow-sm">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-0"><i class="fas fa-file-invoice-dollar me-2"></i> Pending Payment Approvals</h5>
+                        </div>
+                        <span class="badge bg-white text-info fs-5">2 Pending</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0 mb-5">
+        <div class="card-header bg-white py-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="mb-0 fw-bold" id="tableTitle">⚠️ Priority Call List</h5>
+                    <small class="text-muted" id="tableSubtitle">Members expiring soon. Call to renew.</small>
+                </div>
+                <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-warning active" id="btnExpiring" onclick="switchTable('Expiring')">Expiring</button>
+                    <button class="btn btn-outline-danger" id="btnExpired" onclick="switchTable('Expired')">Expired</button>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr id="tableHeader">
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Plan</th>
+                        <th>Days Left</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="priorityTableBody">
+                    </tbody>
+            </table>
+        </div>
+        <div class="card-footer bg-white text-center py-3">
+            <a href="admin-members.html?filter=Expiring" id="viewAllLink" class="btn btn-sm btn-primary">View all Expiring Memberships &rarr;</a>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // 1. Set Date
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-IN', options);
+
+    // 2. Mock Data
+    const expiringData = [
+        {name: "Amit Kumar", phone: "9876543210", plan: "Monthly", metric: "3 Days", id: 103}
+    ];
+
+    const expiredData = [
+        {name: "Sneha Reddy", phone: "9876500000", plan: "Monthly", metric: "Yesterday", id: 104}
+    ];
+
+    // Update Tile Counts
+    document.getElementById('countExpiring').textContent = expiringData.length;
+    document.getElementById('countExpired').textContent = expiredData.length;
+
+    // 3. Switch Logic
+    function switchTable(type) {
+        const tbody = document.getElementById('priorityTableBody');
+        const title = document.getElementById('tableTitle');
+        const subtitle = document.getElementById('tableSubtitle');
+        const viewAll = document.getElementById('viewAllLink');
+        const headerRow = document.getElementById('tableHeader');
+        
+        // Tile Styles
+        const tileExpiring = document.getElementById('tileExpiring');
+        const tileExpired = document.getElementById('tileExpired');
+        const btnExpiring = document.getElementById('btnExpiring');
+        const btnExpired = document.getElementById('btnExpired');
+
+        tbody.innerHTML = ""; // Clear table
+
+        let dataToRender = [];
+        let limit = 7;
+
+        if (type === 'Expiring') {
+            // Style Updates
+            tileExpiring.classList.add('active-filter', 'border-warning');
+            tileExpired.classList.remove('active-filter');
+            btnExpiring.classList.add('active');
+            btnExpired.classList.remove('active');
+
+            // Content Updates
+            title.innerHTML = "⚠️ Priority Call List (Expiring Soon)";
+            subtitle.textContent = "Sorted by soonest expiry. Call these members first.";
+            headerRow.innerHTML = `<th>Name</th><th>Phone</th><th>Plan</th><th>Days Left</th><th>Action</th>`;
+            viewAll.textContent = "View all Expiring Memberships →";
+            viewAll.href = "admin-members.html?filter=Expiring";
+            viewAll.className = "btn btn-sm btn-warning text-dark";
+            
+            dataToRender = expiringData;
+
+        } else {
+            // Style Updates
+            tileExpired.classList.add('active-filter', 'border-danger'); 
+            tileExpiring.classList.remove('active-filter', 'border-warning');
+            btnExpired.classList.add('active');
+            btnExpiring.classList.remove('active');
+
+            // Content Updates
+            title.innerHTML = "❌ Recent Drop-outs (Expired)";
+            subtitle.textContent = "Sorted by most recently expired. Follow up for renewal.";
+            headerRow.innerHTML = `<th>Name</th><th>Phone</th><th>Plan</th><th>Expired On</th><th>Action</th>`;
+            viewAll.textContent = "View all Expired Memberships →";
+            viewAll.href = "admin-members.html?filter=Expired";
+            viewAll.className = "btn btn-sm btn-danger";
+
+            dataToRender = expiredData;
+        }
+
+        const displayData = dataToRender.slice(0, limit);
+
+        if (displayData.length === 0) {
+             tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-3">No members found in this category.</td></tr>`;
+        } else {
+            displayData.forEach(m => {
+                let badgeClass = type === 'Expiring' ? 'bg-warning text-dark' : 'text-danger fw-bold';
+                let btnClass = type === 'Expiring' ? 'btn-outline-dark' : 'btn-outline-danger';
+                let btnText = type === 'Expiring' ? 'View' : 'Renew';
+
+                let metricHtml = type === 'Expiring' 
+                    ? `<span class="badge ${badgeClass}">${m.metric}</span>`
+                    : `<span class="${badgeClass}">${m.metric}</span>`;
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="fw-bold">${m.name}</td>
+                        <td><a href="tel:${m.phone}" class="text-decoration-none text-dark"><i class="fas fa-phone-alt text-muted small me-1"></i> ${m.phone}</a></td>
+                        <td>${m.plan}</td>
+                        <td>${metricHtml}</td>
+                        <td><a href="admin-member-view.html?id=${m.id}" class="btn btn-sm ${btnClass}">${btnText}</a></td>
+                    </tr>
+                `;
+            });
+        }
+    }
+
+    // Initialize
+    switchTable('Expiring');
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
